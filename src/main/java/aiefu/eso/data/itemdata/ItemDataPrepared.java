@@ -141,6 +141,8 @@ public class ItemDataPrepared {
                 if (ids.item == stack.getItem()) {
                     if (stack.getCount() >= ids.amount && testTag(stack, ids.compoundTag)) {
                         this.amount = ids.amount;
+                        this.item = ids.item;
+                        this.compoundTag = ids.compoundTag;
                         this.remainderItem = ids.remainderItem;
                         this.remainderCompoundTag = ids.remainderCompoundTag;
                         this.remainderAmount = ids.remainderAmount;

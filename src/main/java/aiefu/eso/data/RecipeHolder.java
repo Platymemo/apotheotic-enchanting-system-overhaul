@@ -121,6 +121,28 @@ public class RecipeHolder {
                     if(stack.getCount() == 1 && remainder != null){
                         container.setItem(e.getIntKey(), remainder);
                     } else stack.shrink(data.amount);
+
+                    if(remainder != null){
+                        ItemStack copy = remainder.copy();
+                        if(stack.getCount() == data.amount){
+                            container.setItem(e.getIntKey(), copy);
+                            stack.setCount(0);
+                        } else {
+                            stack.shrink(data.amount);
+                            if(!player.getInventory().add(copy)){
+                                player.drop(copy, false);
+                            }
+                            container.setItem(e.getIntKey(), stack);
+                        }
+                    } else {
+                        if(data.amount == stack.getCount()){
+                            container.setItem(e.getIntKey(), ItemStack.EMPTY);
+                            stack.setCount(0);
+                        } else {
+                            stack.shrink(data.amount);
+                            container.setItem(e.getIntKey(), stack);
+                        }
+                    }
                 }
                 return true;
             }
