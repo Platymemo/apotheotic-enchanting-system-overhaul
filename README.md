@@ -6,13 +6,11 @@ __Required both on client and server. Fabric version depends on [Fabric API](htt
 
 __Forge version does NOT require any additional dependencies__
 
-__Project [wiki](https://github.com/CmdrJane/enchanting-system-overhaul/wiki) is here. Dedicated Discord channel is [here](https://discord.gg/rqcHgcCHq3)__
-
 __You can support me on [ko-fi](https://ko-fi.com/cmdrjane) now__
 
-__[CurseForge](https://www.curseforge.com/minecraft/mc-mods/enchanting-system-overhaul)__
+__[CurseForge](https://www.curseforge.com/minecraft/mc-mods/apotheotic-enchanting-system-overhaul)__
 
-__[Modrinth](https://modrinth.com/mod/enchanting-system-overhaul)__
+__[Modrinth](https://modrinth.com/mod/apotheotic-enchanting-system-overhaul)__
 
 ![Overhauled Enchanting Table Menu](https://i.imgur.com/CC12Wro.png)
 

@@ -48,7 +48,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Mod(ESOCommon.MOD_ID)
 public class ESOCommon{
 
-	public static final String MOD_ID = "enchanting_system_overhaul";
+	public static final String MOD_ID = "apotheotic_enchanting_system_overhaul";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
 	private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
