@@ -1,19 +1,15 @@
 package aiefu.eso.menu;
 
 import aiefu.eso.ESOCommon;
-import aiefu.eso.IServerPlayerAcc;
 import aiefu.eso.Utils;
-import aiefu.eso.client.ESOClient;
-import aiefu.eso.data.RecipeHolder;
-import aiefu.eso.data.materialoverrides.MaterialData;
+import aiefu.eso.data.enchantability.EnchantabilityData;
+import aiefu.eso.data.enchantability.EnchantabilityOverrides;
+import aiefu.eso.recipe.EnchantmentRecipe;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -21,118 +17,74 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.EnchantedBookItem;
-import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class OverhauledEnchantmentMenu extends AbstractContainerMenu {
-    public static final ResourceLocation[] TEXTURE_EMPTY_SLOTS = new ResourceLocation[]{InventoryMenu.EMPTY_ARMOR_SLOT_BOOTS,
-            InventoryMenu.EMPTY_ARMOR_SLOT_LEGGINGS, InventoryMenu.EMPTY_ARMOR_SLOT_CHESTPLATE, InventoryMenu.EMPTY_ARMOR_SLOT_HELMET};
-    protected static final EquipmentSlot[] SLOT_IDS = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};;
-
     public static final ResourceLocation LAZURITE_EMPTY_ICON = new ResourceLocation("item/empty_slot_lapis_lazuli");
     public static final ResourceLocation SWORD_EMPTY_ICON = new ResourceLocation("item/empty_slot_sword");
     public static final ResourceLocation INGOT_EMPTY_ICON = new ResourceLocation("item/empty_slot_ingot");
+
     private final ContainerLevelAccess access;
-    public Object2IntOpenHashMap<Enchantment> allEnchantments = new Object2IntOpenHashMap<>();
-    public Object2IntOpenHashMap<Enchantment> enchantments = new Object2IntOpenHashMap<>();
-    public Object2IntOpenHashMap<Enchantment> curses = new Object2IntOpenHashMap<>();
 
-    public boolean isClientSide = false;
+    public final Object2IntOpenHashMap<Enchantment> allEnchantments = new Object2IntOpenHashMap<>();
+    public final Object2IntOpenHashMap<Enchantment> enchantments = new Object2IntOpenHashMap<>();
+    public final Object2IntOpenHashMap<Enchantment> curses = new Object2IntOpenHashMap<>();
 
-    protected SimpleContainer tableInv;
+    private final SimpleContainer tableInv;
+
     public OverhauledEnchantmentMenu(int syncId, Inventory inventory, FriendlyByteBuf buf) {
-        this(syncId, inventory, ContainerLevelAccess.NULL, ESOClient.getClientPlayer());
-        this.isClientSide = true;
-        int r = buf.readVarInt();
-        for (int i = 0; i < r; i++) {
-            String s = buf.readUtf();
-            int l = buf.readVarInt();
-            Enchantment e = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(s));
-            if(e != null){
-                allEnchantments.put(e, l);
-                if(e.isCurse()){
-                    curses.put(e, l);
-                } else enchantments.put(e, l);
+        this(syncId, inventory, ContainerLevelAccess.NULL);
+        int count = buf.readVarInt();
+        for (int i = 0; i < count; i++) {
+            Enchantment enchantment = ForgeRegistries.ENCHANTMENTS.getValue(buf.readResourceLocation());
+            int level = buf.readVarInt();
+            if (enchantment != null) {
+                this.allEnchantments.put(enchantment, level);
+                if (enchantment.isCurse()) {
+                    this.curses.put(enchantment, level);
+                } else {
+                    this.enchantments.put(enchantment, level);
+                }
             }
         }
-
     }
-    public OverhauledEnchantmentMenu(int syncId, Inventory inventory, ContainerLevelAccess access, Player owner) {
-        super(ESOCommon.enchantment_menu_ovr.get(), syncId);
+
+    public OverhauledEnchantmentMenu(int syncId, Inventory inventory, ContainerLevelAccess access) {
+        super(ESOCommon.ENCHANTMENT_MENU.get(), syncId);
         this.access = access;
-        this.tableInv = new SimpleContainer(5){
+        this.tableInv = new SimpleContainer(5) {
             @Override
             public void setChanged() {
                 super.setChanged();
                 OverhauledEnchantmentMenu.this.slotsChanged(this);
             }
         };
-        //Inventory Slots
-        int i;
-        for(i = 0; i < 3; ++i) {
-            for(int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(inventory, j + i * 9 + 9, 9 + j * 18, 99 + i * 18));
+
+        for (int row = 0; row < 3; ++row) {
+            for (int column = 0; column < 9; ++column) {
+                this.addSlot(new Slot(inventory, column + row * 9 + 9, 9 + column * 18, 99 + row * 18));
             }
         }
-        //Hot-bar
-        for(i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(inventory, i, 9 + i * 18, 157));
+
+        for (int slot = 0; slot < 9; ++slot) {
+            this.addSlot(new Slot(inventory, slot, 9 + slot * 18, 157));
         }
-        //Armor
-        int slotId = 0;
-        for (int j = 0; j < 2; j++) {
-            for(i = 0; i < 2; ++i) {
-                final EquipmentSlot equipmentSlot = SLOT_IDS[slotId];
-                this.addSlot(new Slot(inventory, 39 - slotId, 175 + i * 18, 108 + j * 18) {
-                    public void setByPlayer(ItemStack stack) {
-                        OverhauledEnchantmentMenu.onEquipItem(owner, equipmentSlot, stack, this.getItem());
-                        super.setByPlayer(stack);
-                    }
 
-                    public int getMaxStackSize() {
-                        return 1;
-                    }
-
-                    public boolean mayPlace(ItemStack stack) {
-                        return equipmentSlot == Mob.getEquipmentSlotForItem(stack);
-                    }
-
-                    public boolean mayPickup(Player player) {
-                        ItemStack itemStack = this.getItem();
-                        return (player.isCreative() || !EnchantmentHelper.hasBindingCurse(itemStack)) && super.mayPickup(player);
-                    }
-
-                    public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-                        return Pair.of(InventoryMenu.BLOCK_ATLAS, TEXTURE_EMPTY_SLOTS[equipmentSlot.getIndex()]);
-                    }
-                });
-                slotId++;
-            }
-        }
-        //Offhand
-        this.addSlot(new Slot(inventory, 40, 175, 157) {
-            public void setByPlayer(ItemStack stack) {
-                OverhauledEnchantmentMenu.onEquipItem(owner, EquipmentSlot.OFFHAND, stack, this.getItem());
-                super.setByPlayer(stack);
-            }
-
-            public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
-                return Pair.of(InventoryMenu.BLOCK_ATLAS, InventoryMenu.EMPTY_ARMOR_SLOT_SHIELD);
-            }
-        });
-
-        this.addSlot(new Slot(this.tableInv, 0, 24,31){
+        this.addSlot(new Slot(this.tableInv, 0, 24, 31) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return stack.getItem().isEnchantable(stack) || stack.is(Items.BOOK) || stack.is(Items.ENCHANTED_BOOK);
@@ -143,17 +95,22 @@ public class OverhauledEnchantmentMenu extends AbstractContainerMenu {
                 return 1;
             }
 
+            @Override
             public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
                 return Pair.of(InventoryMenu.BLOCK_ATLAS, SWORD_EMPTY_ICON);
             }
         });
-        this.addSlot(new Slot(this.tableInv, 1, 42,31){
+
+        this.addSlot(new Slot(this.tableInv, 1, 42, 31) {
+            @Override
             public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
                 return Pair.of(InventoryMenu.BLOCK_ATLAS, LAZURITE_EMPTY_ICON);
             }
         });
-        for (int j = 0; j < 3; j++) {
-            this.addSlot(new Slot(this.tableInv, j + 2, 15 + j * 18, 49){
+
+        for (int slot = 0; slot < 3; slot++) {
+            this.addSlot(new Slot(this.tableInv, slot + 2, 15 + slot * 18, 49) {
+                @Override
                 public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
                     return Pair.of(InventoryMenu.BLOCK_ATLAS, INGOT_EMPTY_ICON);
                 }
@@ -161,85 +118,77 @@ public class OverhauledEnchantmentMenu extends AbstractContainerMenu {
         }
     }
 
-    public void checkRequirementsAndConsume(ResourceLocation location, Player player, int ordinal){
+    public void checkRequirementsAndConsume(ResourceLocation enchantmentId, Player player, int ordinal) {
         this.access.execute((level, blockPos) -> {
-            boolean instabuild = player.getAbilities().instabuild;
-            ItemStack stack = this.tableInv.getItem(0);
-            boolean isBook = stack.is(Items.BOOK) || stack.is(Items.ENCHANTED_BOOK);
-            if(!stack.isEmpty() && (isBook || stack.getItem().isEnchantable(stack))) {
-                Enchantment target = ForgeRegistries.ENCHANTMENTS.getValue(location);
-                if (target != null) {
-                    Object2IntOpenHashMap<Enchantment> learnedEnchantments = ((IServerPlayerAcc)player).enchantment_overhaul$getUnlockedEnchantments();
-                    int learnedLevel = learnedEnchantments.getInt(target);
-                    if(learnedLevel == 0 && !ESOCommon.config.disableDiscoverySystem && !instabuild){
-                        return;
-                    }
-                    if(target.isCurse() && !ESOCommon.config.enableCursesAmplifier){
-                        return;
-                    }
-
-                    stack.getOrCreateTag();
-                    Map<Enchantment, Integer> enchs = Utils.containsEnchantments(stack) ? EnchantmentHelper.getEnchantments(stack) : new HashMap<>();
-                    int curses = 0;
-                    for (Enchantment e : enchs.keySet()){
-                        if(e.isCurse()) curses++;
-                    }
-                    MaterialData data = Utils.getMatData(stack.getItem());
-                    if((isBook || target.canEnchant(stack)) && (enchs.containsKey(target) || target.isCurse() && curses < data.getMaxCurses()
-                            || Utils.getCurrentLimit(enchs.keySet().size(), curses) < Utils.getEnchantmentsLimit(curses, data))) {
-
-                        if(!isBook){
-                            for (Enchantment e : enchs.keySet()) {
-                                if (e != target && !e.isCompatibleWith(target)) {
-                                    return;
-                                }
-                            }
-                        }
-
-                        int targetLevel = 1;
-                        Integer l = enchs.get(target);
-                        if (l != null) {
-                            targetLevel = l + 1;
-                        }
-                        if(targetLevel > learnedLevel && ESOCommon.config.enableEnchantmentsLeveling && !instabuild){
-                            return;
-                        }
-                        List<RecipeHolder> holders = ESOCommon.getRecipeHolders(location);
-                        if (holders != null && !holders.isEmpty() && ordinal != -1 && ordinal < holders.size()) {
-                            RecipeHolder holder = holders.get(ordinal);
-                            if (instabuild || targetLevel <= holder.getMaxLevel(target) && holder.checkAndConsume(this.tableInv, targetLevel, player)) {
-                                enchs.put(target, targetLevel);
-                                this.applyAndBroadcast(player, enchs, stack, isBook);
-                            }
-                        } else if (instabuild && targetLevel <= target.getMaxLevel()) {
-                            enchs.put(target, targetLevel);
-                            this.applyAndBroadcast(player, enchs, stack, isBook);
-                        }
-                    }
-                }
+            Enchantment enchantment = ForgeRegistries.ENCHANTMENTS.getValue(enchantmentId);
+            EnchantContext context = this.getContext();
+            if (enchantment == null || !this.canShowEnchant(player, context, enchantment)) {
+                return;
             }
+
+            int targetLevel = this.getTargetLevel(context, enchantment);
+            EnchantmentRecipe recipe = this.resolveRecipe(level.getRecipeManager(), enchantmentId, ordinal);
+
+            if (recipe != null) {
+                if (targetLevel > recipe.getMaxLevel(enchantment) || !recipe.checkAndConsume(this.tableInv, targetLevel, player)) {
+                    return;
+                }
+            } else if (ordinal != -1 || !player.getAbilities().instabuild || targetLevel > enchantment.getMaxLevel()) {
+                return;
+            }
+
+            LinkedHashMap<Enchantment, Integer> appliedEnchantments = new LinkedHashMap<>(context.appliedEnchantments());
+            appliedEnchantments.put(enchantment, targetLevel);
+            this.applyAndBroadcast(player, appliedEnchantments, context.stack(), context.book());
         });
     }
 
-    public void applyAndBroadcast(Player player, Map<Enchantment, Integer> map, ItemStack stack, boolean isBook){
-        if(isBook){
-            if(stack.is(Items.BOOK)){
-                stack = new ItemStack(Items.ENCHANTED_BOOK);
-                this.tableInv.setItem(0, stack);
-            }
-            for (Map.Entry<Enchantment, Integer> e : map.entrySet()){
-                EnchantedBookItem.addEnchantment(stack, new EnchantmentInstance(e.getKey(), e.getValue()));
-            }
-        } else {
-            EnchantmentHelper.setEnchantments(map, stack);
+    public List<DisplayOption> getDisplayOptions(RecipeManager recipeManager, Player player) {
+        EnchantContext context = this.getContext();
+        if (!context.enchantableTarget()) {
+            return List.of();
         }
-        player.onEnchantmentPerformed(stack, 0);
-        this.tableInv.setChanged();
-        this.broadcastChanges();
+
+        ArrayList<DisplayOption> options = new ArrayList<>();
+        this.collectDisplayOptions(options, recipeManager, player, context, this.enchantments);
+        this.collectDisplayOptions(options, recipeManager, player, context, this.curses);
+        return options;
+    }
+
+    public int getCurrentEnchantmentCount() {
+        EnchantContext context = this.getContext();
+        return Utils.getCurrentLimit(context.appliedEnchantments().size(), context.curseCount());
+    }
+
+    public int getEnchantmentLimit() {
+        EnchantContext context = this.getContext();
+        if (!context.enchantableTarget()) {
+            return 0;
+        }
+        return Utils.getEnchantmentsLimit(context.curseCount(), context.enchantabilityData());
     }
 
     public SimpleContainer getTableInv() {
-        return tableInv;
+        return this.tableInv;
+    }
+
+    public void applyAndBroadcast(Player player, Map<Enchantment, Integer> enchantments, ItemStack stack, boolean book) {
+        if (book) {
+            if (stack.is(Items.BOOK)) {
+                stack = new ItemStack(Items.ENCHANTED_BOOK);
+                this.tableInv.setItem(0, stack);
+            }
+
+            for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+                EnchantedBookItem.addEnchantment(stack, new EnchantmentInstance(entry.getKey(), entry.getValue()));
+            }
+        } else {
+            EnchantmentHelper.setEnchantments(enchantments, stack);
+        }
+
+        player.onEnchantmentPerformed(stack, 0);
+        this.tableInv.setChanged();
+        this.broadcastChanges();
     }
 
     @Override
@@ -249,58 +198,24 @@ public class OverhauledEnchantmentMenu extends AbstractContainerMenu {
     }
 
     @Override
-    protected void clearContainer(Player player, Container container) {
-        super.clearContainer(player, container);
-    }
-
-    @Override
-    public void slotsChanged(Container container) {
-        super.slotsChanged(container);
-    }
-
-    public static void onEquipItem(Player player, EquipmentSlot slot, ItemStack newItem, ItemStack oldItem) {
-        Equipable equipable = Equipable.get(newItem);
-        if (equipable != null) {
-            player.onEquipItem(slot, oldItem, newItem);
-        }
-    }
-
-    @Override
-    public @NotNull ItemStack quickMoveStack(Player player, int i) {
+    public @NotNull ItemStack quickMoveStack(Player player, int slotIndex) {
         ItemStack returnStack = ItemStack.EMPTY;
-        Slot slot = slots.get(i);
-        if(slot.hasItem()){
+        Slot slot = this.slots.get(slotIndex);
+        if (slot.hasItem()) {
             ItemStack stack = slot.getItem();
-            returnStack = stack.copy();
-            if(i == 41){
-                EquipmentSlot eqs = Mob.getEquipmentSlotForItem(stack);
-                if(eqs.isArmor()){
-                    int o = 39 - eqs.getIndex();
-                    if(!moveItemStackTo(stack, o, o + 1, true) && !moveItemStackTo(stack, 0, 36, true)){
-                        return ItemStack.EMPTY;
-                    }
-                } else if(eqs == EquipmentSlot.OFFHAND){
-                    if(!moveItemStackTo(stack, 40 , 41 , true) && !moveItemStackTo(stack, 0, 36, true)){
-                        return ItemStack.EMPTY;
-                    }
-                } else {
-                    if(!moveItemStackTo(stack, 0, 36, true)){
-                        return ItemStack.EMPTY;
-                    }
-                }
-            } else if(i > 41 && i < 46){
-                if(!moveItemStackTo(stack, 0 , 36, true)){
-                    return ItemStack.EMPTY;
-                }
+            if (slotIndex > 35 && !this.moveItemStackTo(stack, 0, 35, false)) {
+                return ItemStack.EMPTY;
+            }
+
+            ItemStack singleItem = stack.copyWithCount(1);
+            if (!this.slots.get(36).hasItem() && this.slots.get(36).mayPlace(singleItem)) {
+                stack.shrink(1);
+                this.slots.get(36).setByPlayer(singleItem);
+                returnStack = ItemStack.EMPTY;
+            } else if (!this.moveItemStackTo(stack, 37, 41, false)) {
+                return ItemStack.EMPTY;
             } else {
-                ItemStack stack2 = stack.copyWithCount(1);
-                if(!this.slots.get(41).hasItem() && this.slots.get(41).mayPlace(stack2)){
-                    stack.shrink(1);
-                    this.slots.get(41).setByPlayer(stack2);
-                    returnStack = ItemStack.EMPTY;
-                } else if(!moveItemStackTo(stack, 42, 46, false)){
-                    return ItemStack.EMPTY;
-                } else return ItemStack.EMPTY;
+                return ItemStack.EMPTY;
             }
 
             if (stack.isEmpty()) {
@@ -320,5 +235,176 @@ public class OverhauledEnchantmentMenu extends AbstractContainerMenu {
     @Override
     public boolean stillValid(Player player) {
         return stillValid(this.access, player, Blocks.ENCHANTING_TABLE);
+    }
+
+    private void collectDisplayOptions(List<DisplayOption> options,
+                                       RecipeManager recipeManager,
+                                       Player player,
+                                       EnchantContext context,
+                                       Object2IntOpenHashMap<Enchantment> source) {
+        for (Enchantment enchantment : source.keySet()) {
+            if (!this.canShowEnchant(player, context, enchantment)) {
+                continue;
+            }
+
+            int targetLevel = this.getTargetLevel(context, enchantment);
+            ResourceLocation enchantmentId = ForgeRegistries.ENCHANTMENTS.getKey(enchantment);
+            if (enchantmentId == null) {
+                continue;
+            }
+
+            List<ResolvedRecipe> displayedRecipes = this.resolveDisplayedRecipes(recipeManager, enchantmentId, enchantment, targetLevel);
+            if (displayedRecipes.isEmpty()) {
+                if ((player.getAbilities().instabuild || !ESOCommon.CONFIG.hideEnchantmentsWithoutRecipe.get()) && targetLevel <= enchantment.getMaxLevel()) {
+                    options.add(new DisplayOption(enchantment, targetLevel, null, -1, player.getAbilities().instabuild));
+                }
+                continue;
+            }
+
+            for (ResolvedRecipe resolvedRecipe : displayedRecipes) {
+                options.add(new DisplayOption(
+                        enchantment,
+                        targetLevel,
+                        resolvedRecipe.recipe(),
+                        resolvedRecipe.ordinal(),
+                        this.canAffordRecipe(player, enchantment, targetLevel, resolvedRecipe.recipe())
+                ));
+            }
+        }
+    }
+
+    private boolean canShowEnchant(Player player, EnchantContext context, Enchantment enchantment) {
+        if (enchantment.isCurse() && !ESOCommon.CONFIG.enableCursesAmplifier.get()) {
+            return false;
+        }
+
+        int targetLevel = this.getTargetLevel(context, enchantment);
+        if (!this.passesDiscovery(player, enchantment, targetLevel)) {
+            return false;
+        }
+        if (!this.passesCompatibility(context, enchantment)) {
+            return false;
+        }
+        return this.passesMaterialRules(context, enchantment);
+    }
+
+    private boolean canAffordRecipe(Player player, Enchantment enchantment, int targetLevel, @Nullable EnchantmentRecipe recipe) {
+        if (player.getAbilities().instabuild && targetLevel <= enchantment.getMaxLevel()) {
+            return true;
+        }
+        return recipe != null && recipe.check(this.tableInv, targetLevel, player);
+    }
+
+    private boolean passesDiscovery(Player player, Enchantment enchantment, int targetLevel) {
+        if (player.getAbilities().instabuild || ESOCommon.CONFIG.disableDiscoverySystem.get()) {
+            return true;
+        }
+
+        int knownLevel = this.allEnchantments.getInt(enchantment);
+        if (knownLevel <= 0) {
+            return false;
+        }
+
+        return !ESOCommon.CONFIG.enableEnchantmentsLeveling.get() || targetLevel <= knownLevel;
+    }
+
+    private boolean passesCompatibility(EnchantContext context, Enchantment target) {
+        if (context.book()) {
+            return true;
+        }
+        if (!target.canEnchant(context.stack())) {
+            return false;
+        }
+
+        for (Enchantment enchantment : context.appliedEnchantments().keySet()) {
+            if (enchantment != target && !enchantment.isCompatibleWith(target)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean passesMaterialRules(EnchantContext context, Enchantment target) {
+        if (context.appliedEnchantments().containsKey(target)) {
+            return true;
+        }
+
+        if (target.isCurse()) {
+            return context.curseCount() < context.enchantabilityData().getMaxCurses();
+        }
+
+        return Utils.getCurrentLimit(context.appliedEnchantments().size(), context.curseCount())
+                < Utils.getEnchantmentsLimit(context.curseCount(), context.enchantabilityData());
+    }
+
+    private int getTargetLevel(EnchantContext context, Enchantment enchantment) {
+        return context.appliedEnchantments().getOrDefault(enchantment, 0) + 1;
+    }
+
+    private EnchantContext getContext() {
+        ItemStack stack = this.tableInv.getItem(0);
+        boolean book = isBook(stack);
+        boolean enchantableTarget = !stack.isEmpty() && (book || stack.getItem().isEnchantable(stack));
+        Map<Enchantment, Integer> appliedEnchantments = enchantableTarget ? EnchantmentHelper.getEnchantments(stack) : Map.of();
+        int curseCount = 0;
+        for (Enchantment enchantment : appliedEnchantments.keySet()) {
+            if (enchantment.isCurse()) {
+                curseCount++;
+            }
+        }
+
+        EnchantabilityData enchantabilityData = enchantableTarget ? Utils.getEnchantabilityData(stack) : EnchantabilityOverrides.getDefaultEnchantabilityData();
+        return new EnchantContext(stack, appliedEnchantments, curseCount, enchantabilityData, book, enchantableTarget);
+    }
+
+    private List<ResolvedRecipe> resolveDisplayedRecipes(RecipeManager recipeManager,
+                                                         ResourceLocation enchantmentId,
+                                                         Enchantment enchantment,
+                                                         int targetLevel) {
+        List<EnchantmentRecipe> recipes = ESOCommon.getRecipes(recipeManager, enchantmentId);
+        ArrayList<ResolvedRecipe> displayedRecipes = new ArrayList<>();
+
+        if (!recipes.isEmpty()) {
+            for (int ordinal = 0; ordinal < recipes.size(); ordinal++) {
+                EnchantmentRecipe recipe = recipes.get(ordinal);
+                if (recipe.getLevel(targetLevel) != null && targetLevel <= recipe.getMaxLevel(enchantment)) {
+                    displayedRecipes.add(new ResolvedRecipe(recipe, ordinal));
+                }
+            }
+        }
+
+        return displayedRecipes;
+    }
+
+    @Nullable
+    private EnchantmentRecipe resolveRecipe(RecipeManager recipeManager, ResourceLocation enchantmentId, int ordinal) {
+        if (ordinal < 0) {
+            return ESOCommon.CONFIG.enableDefaultRecipe.get() ? ESOCommon.defaultRecipe : null;
+        }
+
+        List<EnchantmentRecipe> recipes = ESOCommon.getRecipes(recipeManager, enchantmentId);
+        return ordinal < recipes.size() ? recipes.get(ordinal) : null;
+    }
+
+    private static boolean isBook(ItemStack stack) {
+        return stack.is(Items.BOOK) || stack.is(Items.ENCHANTED_BOOK);
+    }
+
+    private record EnchantContext(ItemStack stack,
+                                  Map<Enchantment, Integer> appliedEnchantments,
+                                  int curseCount,
+                                  EnchantabilityData enchantabilityData,
+                                  boolean book,
+                                  boolean enchantableTarget) {
+    }
+
+    public record DisplayOption(Enchantment enchantment,
+                                int targetLevel,
+                                @Nullable EnchantmentRecipe recipe,
+                                int ordinal,
+                                boolean affordableNow) {
+    }
+
+    private record ResolvedRecipe(@Nullable EnchantmentRecipe recipe, int ordinal) {
     }
 }

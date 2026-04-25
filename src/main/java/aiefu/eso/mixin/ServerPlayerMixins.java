@@ -1,7 +1,6 @@
 package aiefu.eso.mixin;
 
-import aiefu.eso.ESOCommon;
-import aiefu.eso.IServerPlayerAcc;
+import aiefu.eso.UnlockedEnchantmentHolder;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -17,16 +16,16 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerPlayer.class)
-public class ServerPlayerMixins implements IServerPlayerAcc {
+public class ServerPlayerMixins implements UnlockedEnchantmentHolder {
     @Unique
-    private Object2IntOpenHashMap<Enchantment> unlockedEnchantments = new Object2IntOpenHashMap<>();
+    private Object2IntOpenHashMap<Enchantment> apoth_eso$unlockedEnchantments = new Object2IntOpenHashMap<>();
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-    private void saveUnlockedEnchantmentsDataEOVR(CompoundTag compound, CallbackInfo ci){
+    private void saveUnlockedEnchantmentsDataAESO(CompoundTag compound, CallbackInfo ci) {
         ListTag enchantments = new ListTag();
-        unlockedEnchantments.forEach((k, v) -> {
+        apoth_eso$unlockedEnchantments.forEach((k, v) -> {
             ResourceLocation key = ForgeRegistries.ENCHANTMENTS.getKey(k);
-            if(key != null){
+            if (key != null) {
                 CompoundTag enchantmentData = new CompoundTag();
                 enchantmentData.putString("identifier", key.toString());
                 enchantmentData.putInt("level", v);
@@ -39,30 +38,19 @@ public class ServerPlayerMixins implements IServerPlayerAcc {
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
-    private void readUnlockedEnchantmentsDataEOVR(CompoundTag compound, CallbackInfo ci){
-        this.unlockedEnchantments.clear();
-        if(compound.contains("UnlockedEnchs", Tag.TAG_LIST)){
-            ListTag enchantments = compound.getList("UnlockedEnchs", Tag.TAG_STRING);
-            for (Tag t : enchantments){
-                String id = t.getAsString();
-                Enchantment e = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(id));
-                if(e != null){
-                    this.unlockedEnchantments.put(e, ESOCommon.getMaximumPossibleEnchantmentLevel(e));
-                }
-            }
-            compound.remove("UnlockedEnchs");
-        }
-        if(compound.contains("esodata", Tag.TAG_COMPOUND)){
+    private void readUnlockedEnchantmentsDataAESO(CompoundTag compound, CallbackInfo ci) {
+        this.apoth_eso$unlockedEnchantments.clear();
+        if (compound.contains("esodata", Tag.TAG_COMPOUND)) {
             CompoundTag esoData = compound.getCompound("esodata");
-            if(esoData.contains("LearnedEnchantments", Tag.TAG_LIST)){
+            if (esoData.contains("LearnedEnchantments", Tag.TAG_LIST)) {
                 ListTag enchantments = esoData.getList("LearnedEnchantments", Tag.TAG_COMPOUND);
-                for (Tag t : enchantments){
+                for (Tag t : enchantments) {
                     CompoundTag ct = (CompoundTag) t;
                     String id = ct.getString("identifier");
                     int level = ct.getInt("level");
                     Enchantment e = ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation(id));
-                    if(e != null){
-                        this.unlockedEnchantments.put(e, level);
+                    if (e != null) {
+                        this.apoth_eso$unlockedEnchantments.put(e, level);
                     }
                 }
             }
@@ -73,11 +61,11 @@ public class ServerPlayerMixins implements IServerPlayerAcc {
 
     @Override
     public Object2IntOpenHashMap<Enchantment> enchantment_overhaul$getUnlockedEnchantments() {
-        return unlockedEnchantments;
+        return apoth_eso$unlockedEnchantments;
     }
 
     @Override
     public void enchantment_overhaul$setUnlockedEnchantments(Object2IntOpenHashMap<Enchantment> map) {
-        this.unlockedEnchantments = map;
+        this.apoth_eso$unlockedEnchantments = map;
     }
 }

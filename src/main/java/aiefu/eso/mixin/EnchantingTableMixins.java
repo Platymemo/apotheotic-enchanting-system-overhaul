@@ -1,7 +1,7 @@
 package aiefu.eso.mixin;
 
 import aiefu.eso.ESOCommon;
-import aiefu.eso.IServerPlayerAcc;
+import aiefu.eso.UnlockedEnchantmentHolder;
 import aiefu.eso.menu.OverhauledEnchantmentMenu;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -31,34 +31,34 @@ import java.util.Objects;
 import java.util.Set;
 
 @Mixin(EnchantmentTableBlock.class)
-public abstract class EnchantingTableMixins extends BaseEntityBlock{
+public abstract class EnchantingTableMixins extends BaseEntityBlock {
 
     protected EnchantingTableMixins(Properties properties) {
         super(properties);
     }
 
     @Inject(method = "use", at = @At("HEAD"), cancellable = true)
-    public void interceptMenuProviderCall(BlockState state, Level level, BlockPos pos, Player player, InteractionHand interactionHand, BlockHitResult hitResult, CallbackInfoReturnable<InteractionResult> cir){
+    public void interceptMenuProviderCall(BlockState state, Level level, BlockPos pos, Player player, InteractionHand interactionHand, BlockHitResult hitResult, CallbackInfoReturnable<InteractionResult> cir) {
         if (level.isClientSide) {
             cir.setReturnValue(InteractionResult.SUCCESS);
         } else {
-            if(level.getBlockEntity(pos) instanceof EnchantmentTableBlockEntity ee){
+            if (level.getBlockEntity(pos) instanceof EnchantmentTableBlockEntity ee) {
                 NetworkHooks.openScreen((ServerPlayer) player, new SimpleMenuProvider((id, playerInv, p)
-                        -> new OverhauledEnchantmentMenu(id, playerInv, ContainerLevelAccess.create(level, pos), p), ee.getName()), buf -> {
-                    if(player.getAbilities().instabuild || ESOCommon.config.disableDiscoverySystem){
+                        -> new OverhauledEnchantmentMenu(id, playerInv, ContainerLevelAccess.create(level, pos)), ee.getName()), buf -> {
+                    if (player.getAbilities().instabuild || ESOCommon.CONFIG.disableDiscoverySystem.get()) {
                         Set<ResourceLocation> keyset = ForgeRegistries.ENCHANTMENTS.getKeys();
                         buf.writeVarInt(keyset.size());
-                        for (ResourceLocation loc : keyset){
-                            buf.writeUtf(loc.toString());
-                            buf.writeVarInt(ESOCommon.getMaximumPossibleEnchantmentLevel(ForgeRegistries.ENCHANTMENTS.getValue(loc)));
+                        for (ResourceLocation loc : keyset) {
+                            buf.writeResourceLocation(loc);
+                            buf.writeVarInt(ESOCommon.getMaximumPossibleEnchantmentLevel(level.getRecipeManager(), ForgeRegistries.ENCHANTMENTS.getValue(loc)));
                         }
                     } else {
-                        Object2IntOpenHashMap<Enchantment> enchantments = ((IServerPlayerAcc) player).enchantment_overhaul$getUnlockedEnchantments();
+                        Object2IntOpenHashMap<Enchantment> enchantments = ((UnlockedEnchantmentHolder) player).enchantment_overhaul$getUnlockedEnchantments();
                         buf.writeVarInt(enchantments.size());
                         for (Object2IntMap.Entry<Enchantment> e : enchantments.object2IntEntrySet()) {
                             ResourceLocation loc = ForgeRegistries.ENCHANTMENTS.getKey(e.getKey());
                             Objects.requireNonNull(loc);
-                            buf.writeUtf(loc.toString());
+                            buf.writeResourceLocation(loc);
                             buf.writeVarInt(e.getIntValue());
                         }
                     }

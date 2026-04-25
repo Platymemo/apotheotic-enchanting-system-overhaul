@@ -1,0 +1,82 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "farmersdelight"
+    }
+  ],
+  "enchantment": "farmersdelight:backstabbing",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 6
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:flint"
+          },
+          "amount": 3
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 2,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:flint"
+          },
+          "amount": 7
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 3,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:flint"
+          },
+          "amount": 10
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+

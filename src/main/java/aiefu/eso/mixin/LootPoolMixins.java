@@ -52,7 +52,7 @@ public class LootPoolMixins {
         List<Enchantment> list = new ArrayList<>(enchs.keySet());
         Collections.shuffle(list);
         int size = Math.min(list.size(), stack.getItem() == Items.ENCHANTED_BOOK ?
-                ESOCommon.config.maxEnchantmentsOnLootBooks : ESOCommon.config.maxEnchantmentsOnLootItems);
+                ESOCommon.CONFIG.maxEnchantmentsOnLootBooks.get() : ESOCommon.CONFIG.maxEnchantmentsOnLootItems.get());
         for (int i = 0; i < size; i++) {
             Enchantment e = list.get(i);
             enchantments.put(e, enchs.get(e));

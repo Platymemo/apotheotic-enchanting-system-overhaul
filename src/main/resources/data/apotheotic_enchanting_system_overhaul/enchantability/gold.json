@@ -1,0 +1,8 @@
+{
+  "ingredient": {
+    "tag": "minecraft:piglin_loved"
+  },
+  "max_enchantments": 5,
+  "max_curses": 2,
+  "curse_multiplier": 2
+}

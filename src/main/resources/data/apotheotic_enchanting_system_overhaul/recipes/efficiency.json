@@ -1,0 +1,170 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "enchantment": "minecraft:efficiency",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:gold_ingot"
+          },
+          "amount": 6
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:sugar"
+          },
+          "amount": 6
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 2,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:gold_ingot"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:sugar"
+          },
+          "amount": 24
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 3,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:gold_ingot"
+          },
+          "amount": 32
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:sugar"
+          },
+          "amount": 32
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:potion"
+          },
+          "amount": 1
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 4,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 32
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:gold_ingot"
+          },
+          "amount": 32
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:potion"
+          },
+          "amount": 1
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:potion"
+          },
+          "amount": 1
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 5,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 32
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:gold_ingot"
+          },
+          "amount": 32
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:potion"
+          },
+          "amount": 1
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:potion"
+          },
+          "amount": 1
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+

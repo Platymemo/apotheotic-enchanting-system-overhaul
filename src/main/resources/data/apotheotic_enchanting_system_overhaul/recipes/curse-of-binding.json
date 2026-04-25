@@ -1,0 +1,42 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "enchantment": "minecraft:binding_curse",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:cobweb"
+          },
+          "amount": 6
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:slime_ball"
+          },
+          "amount": 6
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+

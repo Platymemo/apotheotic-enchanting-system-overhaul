@@ -7,16 +7,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 
-import java.util.Objects;
-
 public class CustomEnchantingButton extends Button {
-    public static final ResourceLocation ench_buttons = new ResourceLocation(ESOCommon.MOD_ID, "textures/gui/ench_buttons.png");
+    public static final ResourceLocation ENCH_BUTTONS = new ResourceLocation(ESOCommon.MOD_ID, "textures/gui/ench_buttons.png");
+
     public CustomEnchantingButton(int x, int y, int width, int height, Component message, OnPress onPress) {
         super(x, y, width, height, message, onPress, DEFAULT_NARRATION);
     }
@@ -27,30 +25,25 @@ public class CustomEnchantingButton extends Button {
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, this.alpha);
         RenderSystem.enableBlend();
         RenderSystem.enableDepthTest();
-        guiGraphics.blitNineSliced(ench_buttons, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4, 200, 20, 0, this.getTextureY());
+        guiGraphics.blitNineSliced(ENCH_BUTTONS, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4, 200, 20, 0, this.getTextureY());
         guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
-        int i = this.active ? ESOClient.colorData.getTextActiveColor() : ESOClient.colorData.getTextInactiveColor();
-        this.drawCenteredString(guiGraphics, minecraft.font, this.getMessage(), i | Mth.ceil(this.alpha * 255.0F) << 24);
-        //this.renderString(guiGraphics, minecraft.font, i | Mth.ceil(this.alpha * 255.0F) << 24);
+        int color = this.active ? ESOClient.colorData.getTextActiveColor() : ESOClient.colorData.getTextInactiveColor();
+        this.drawCenteredLabel(guiGraphics, minecraft.font, this.getMessage(), color | Mth.ceil(this.alpha * 255.0F) << 24);
     }
 
-    public void drawCenteredString(GuiGraphics graphics, Font font, Component text, int color){
-        Objects.requireNonNull(font);
-
-        int l = font.width(text);
-        if(l > this.width - 5){
-            String s = Language.getInstance().getOrDefault(text.getString());
-            int length = s.length();
-            text = Component.literal(s.substring(0, Math.min(14, length)) + "...");
+    private void drawCenteredLabel(GuiGraphics graphics, Font font, Component text, int color) {
+        int maxTextWidth = this.width - 5;
+        String visible = font.plainSubstrByWidth(text.getString(), maxTextWidth);
+        if (visible.length() < text.getString().length()) {
+            visible = font.plainSubstrByWidth(text.getString(), Math.max(0, maxTextWidth - font.width("..."))) + "...";
         }
-        int minX = this.getX() + width;
 
-        int r = (this.getY() + this.getY() + this.getHeight() - 9) / 2 + 1;
-
-        this.drawCenteredString(graphics, font, text, (minX + this.getX()) / 2, r, color, false);
+        int centerX = this.getX() + this.width / 2;
+        int centerY = (this.getY() + this.getY() + this.getHeight() - 9) / 2 + 1;
+        this.drawCenteredString(graphics, font, Component.literal(visible), centerX, centerY, color, false);
     }
 
-    public void drawCenteredString(GuiGraphics graphics, Font font, Component text, int x, int y, int color, boolean shadow){
+    private void drawCenteredString(GuiGraphics graphics, Font font, Component text, int x, int y, int color, boolean shadow) {
         FormattedCharSequence formattedCharSequence = text.getVisualOrderText();
         graphics.drawString(font, formattedCharSequence, x - font.width(formattedCharSequence) / 2, y, color, shadow);
     }

@@ -2,7 +2,7 @@ package aiefu.eso.mixin;
 
 import aiefu.eso.ESOCommon;
 import aiefu.eso.Utils;
-import aiefu.eso.data.materialoverrides.MaterialData;
+import aiefu.eso.data.enchantability.EnchantabilityData;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
@@ -17,42 +17,45 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Mixin(AnvilMenu.class)
 public abstract class AnvilMenuMixins extends ItemCombinerMenu {
 
-    @Shadow @Final private DataSlot cost;
+    @Shadow
+    @Final
+    private DataSlot cost;
 
     public AnvilMenuMixins(@Nullable MenuType<?> type, int containerId, Inventory playerInventory, ContainerLevelAccess access) {
         super(type, containerId, playerInventory, access);
     }
 
-    @Inject(method = "createResult",at = @At(value = "INVOKE", target = "net/minecraft/world/inventory/AnvilMenu.broadcastChanges()V", shift = At.Shift.BEFORE))
-    public void patchResultStack(CallbackInfo ci){
-        if(!this.player.getAbilities().instabuild){
-            ItemStack stack = this.resultSlots.getItem(0);
-            if(!stack.isEmpty() && Utils.containsEnchantments(stack)){
+    @Inject(method = "createResult", at = @At(value = "INVOKE", target = "net/minecraft/world/inventory/AnvilMenu.broadcastChanges()V", shift = At.Shift.BEFORE))
+    public void patchResultStack(CallbackInfo ci) {
+        if (!this.player.getAbilities().instabuild) {
+            ItemStack result = this.resultSlots.getItem(0);
+            if (!result.isEmpty() && !EnchantmentHelper.getEnchantments(result).isEmpty()) {
                 ItemStack input = this.inputSlots.getItem(0);
 
-                Map<Enchantment, Integer> enchs = EnchantmentHelper.getEnchantments(stack);
-                Map<Enchantment, Integer> inputE = EnchantmentHelper.getEnchantments(input);
+                Map<Enchantment, Integer> resultingEnchants = EnchantmentHelper.getEnchantments(result);
+                Map<Enchantment, Integer> inputEnchants = EnchantmentHelper.getEnchantments(input);
 
-                if(!Utils.containsSameEnchantmentsOfSameLevel(enchs, inputE)){
-                    if(ESOCommon.config.disableAnvilEnchanting){
+                if (!Utils.containsSameEnchantmentsOfSameLevel(resultingEnchants, inputEnchants)) {
+                    if (ESOCommon.CONFIG.disableAnvilEnchanting.get()) {
                         this.resultSlots.setItem(0, ItemStack.EMPTY);
                         this.cost.set(0);
-                    } else if (ESOCommon.config.disableBookCombining && stack.is(Items.ENCHANTED_BOOK)) {
+                    } else if (ESOCommon.CONFIG.disableBookCombining.get() && result.is(Items.ENCHANTED_BOOK)) {
                         this.resultSlots.setItem(0, ItemStack.EMPTY);
                         this.cost.set(0);
                     } else {
-                        MaterialData data = Utils.getMatData(stack.getItem());
-                        Map<Enchantment, Integer> curses = Utils.filterToNewMap(enchs, (e, i) -> e.isCurse());
-                        int limit = Utils.getEnchantmentsLimit(curses.size(), data);
+                        EnchantabilityData data = Utils.getEnchantabilityData(result);
+                        int curses = resultingEnchants.keySet().stream().filter(Enchantment::isCurse).mapToInt(e -> 1).sum();
+                        int limit = Utils.getEnchantmentsLimit(curses, data);
 
-                        if(stack.isDamageableItem() && input.isDamageableItem() && stack.getDamageValue() != input.getDamageValue()){
-                            EnchantmentHelper.setEnchantments(inputE, stack);
-                        } else if(enchs.size() > limit + curses.size()){
+                        if (result.isDamageableItem() && input.isDamageableItem() && result.getDamageValue() != input.getDamageValue()) {
+                            EnchantmentHelper.setEnchantments(inputEnchants, result);
+                        } else if (resultingEnchants.size() > limit + curses) {
                             this.resultSlots.setItem(0, ItemStack.EMPTY);
                             this.cost.set(0);
                         }

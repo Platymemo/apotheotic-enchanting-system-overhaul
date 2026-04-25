@@ -1,0 +1,152 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "enchantment": "minecraft:impaling",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:glowstone_dust"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:quartz"
+          },
+          "amount": 6
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:amethyst_shard"
+          },
+          "amount": 3
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 2,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:glowstone_dust"
+          },
+          "amount": 16
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:quartz"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:amethyst_shard"
+          },
+          "amount": 3
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 3,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:glowstone_dust"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:quartz"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:amethyst_shard"
+          },
+          "amount": 6
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 4,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:glowstone_dust"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:quartz"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:amethyst_shard"
+          },
+          "amount": 6
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 5,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:glowstone_dust"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:quartz"
+          },
+          "amount": 32
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:amethyst_shard"
+          },
+          "amount": 7
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+

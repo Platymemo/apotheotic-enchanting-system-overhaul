@@ -1,0 +1,102 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "enchantment": "minecraft:quick_charge",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:string"
+          },
+          "amount": 3
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:slime_ball"
+          },
+          "amount": 2
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 2,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:lead"
+          },
+          "amount": 1
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:slime_ball"
+          },
+          "amount": 6
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 3,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": [
+            {
+              "type": "forge:nbt",
+              "item": "minecraft:potion",
+              "nbt": "{Potion: \"minecraft:swiftness\"}"
+            },
+            {
+              "type": "forge:nbt",
+              "item": "minecraft:potion",
+              "nbt": "{Potion: \"minecraft:long_swiftness\"}"
+            },
+            {
+              "type": "forge:nbt",
+              "item": "minecraft:potion",
+              "nbt": "{Potion: \"minecraft:strong_swiftness\"}"
+            }
+          ],
+          "amount": 1
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+

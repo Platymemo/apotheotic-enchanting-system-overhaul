@@ -1,0 +1,100 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "frycparry"
+    }
+  ],
+  "enchantment": "frycparry:prediction_enchantment",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:ender_eye"
+          },
+          "amount": 1
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:sugar"
+          },
+          "amount": 12
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 2,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 16
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:ender_eye"
+          },
+          "amount": 3
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:sugar"
+          },
+          "amount": 12
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 3,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 32
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:ender_eye"
+          },
+          "amount": 7
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:sugar"
+          },
+          "amount": 24
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+

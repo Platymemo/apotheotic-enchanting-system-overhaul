@@ -1,0 +1,121 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "enchantment": "minecraft:respiration",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 6
+        },
+        {
+          "ingredient": [
+            {
+              "type": "forge:nbt",
+              "item": "minecraft:potion",
+              "nbt": "{Potion: \"minecraft:water_breathing\"}"
+            },
+            {
+              "type": "forge:nbt",
+              "item": "minecraft:potion",
+              "nbt": "{Potion: \"minecraft:long_water_breathing\"}"
+            }
+          ],
+          "amount": 1
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:amethyst_shard"
+          },
+          "amount": 2
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 2,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": [
+            {
+              "type": "forge:nbt",
+              "item": "minecraft:potion",
+              "nbt": "{Potion: \"minecraft:water_breathing\"}"
+            },
+            {
+              "type": "forge:nbt",
+              "item": "minecraft:potion",
+              "nbt": "{Potion: \"minecraft:long_water_breathing\"}"
+            }
+          ],
+          "amount": 1
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:amethyst_shard"
+          },
+          "amount": 3
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 3,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": [
+            {
+              "type": "forge:nbt",
+              "item": "minecraft:potion",
+              "nbt": "{Potion: \"minecraft:water_breathing\"}"
+            },
+            {
+              "type": "forge:nbt",
+              "item": "minecraft:potion",
+              "nbt": "{Potion: \"minecraft:long_water_breathing\"}"
+            }
+          ],
+          "amount": 1
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:amethyst_shard"
+          },
+          "amount": 7
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+

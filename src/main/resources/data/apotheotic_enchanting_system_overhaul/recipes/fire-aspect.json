@@ -1,0 +1,77 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "enchantment": "minecraft:fire_aspect",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:glowstone_dust"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:blaze_rod"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:blaze_powder"
+          },
+          "amount": 6
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:magma_cream"
+          },
+          "amount": 6
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 2,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:glowstone_dust"
+          },
+          "amount": 64
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:blaze_rod"
+          },
+          "amount": 16
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:blaze_powder"
+          },
+          "amount": 18
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:magma_cream"
+          },
+          "amount": 12
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+

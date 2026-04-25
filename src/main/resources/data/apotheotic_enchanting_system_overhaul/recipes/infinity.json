@@ -1,0 +1,42 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "enchantment": "minecraft:infinity",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 32
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:ender_pearl"
+          },
+          "amount": 6
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:arrow"
+          },
+          "amount": 1
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 24
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+

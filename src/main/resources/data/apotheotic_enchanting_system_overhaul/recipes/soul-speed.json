@@ -1,0 +1,94 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "enchantment": "minecraft:soul_speed",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:glowstone_dust"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "tag": "minecraft:soul_fire_base_blocks"
+          },
+          "amount": 12
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 2,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:glowstone_dust"
+          },
+          "amount": 16
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 16
+        },
+        {
+          "ingredient": {
+            "tag": "minecraft:soul_fire_base_blocks"
+          },
+          "amount": 12
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 3,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:glowstone_dust"
+          },
+          "amount": 16
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 16
+        },
+        {
+          "ingredient": {
+            "tag": "minecraft:soul_fire_base_blocks"
+          },
+          "amount": 24
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+

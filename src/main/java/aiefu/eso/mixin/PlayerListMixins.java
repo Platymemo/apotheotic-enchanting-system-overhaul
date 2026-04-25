@@ -1,10 +1,7 @@
 package aiefu.eso.mixin;
 
-import aiefu.eso.ESOCommon;
-import aiefu.eso.data.RecipeHolder;
 import aiefu.eso.network.NetworkManager;
-import aiefu.eso.network.packets.SyncEnchantmentsData;
-import aiefu.eso.network.packets.SyncMatData;
+import aiefu.eso.network.packets.SyncEnchantabilityData;
 import net.minecraft.network.Connection;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -15,9 +12,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.io.IOException;
-
 @Mixin(PlayerList.class)
 public class PlayerListMixins {
     @Shadow @Final private MinecraftServer server;
@@ -25,26 +19,15 @@ public class PlayerListMixins {
     @Inject(method = "placeNewPlayer", at = @At("RETURN"))
     private void sendEOVRDataSyncPacket(Connection p_11262_, ServerPlayer player, CallbackInfo ci){
         if(!player.server.isSingleplayerOwner(player.getGameProfile())){
-            NetworkManager.sendToPlayer(new SyncEnchantmentsData(), player);
-            NetworkManager.sendToPlayer(new SyncMatData(), player);
-        } else {
-            try {
-                ESOCommon.readConfig();
-                ESOCommon.LOGGER.info("Configuration file reloaded from disk");
-            } catch (IOException e) {
-                ESOCommon.LOGGER.error("Unable to read config file from disk");
-                e.printStackTrace();
-            }
+            NetworkManager.sendToPlayer(new SyncEnchantabilityData(), player);
         }
     }
 
     @Inject(method = "reloadResources", at = @At("RETURN"))
     private void sendEOVRDataSyncPacketOnReload(CallbackInfo ci){
-        ESOCommon.recipeMap.values().forEach(l -> l.forEach(RecipeHolder::processTags));
         this.server.getPlayerList().getPlayers().forEach(player -> {
             if(!this.server.isSingleplayerOwner(player.getGameProfile())){
-                NetworkManager.sendToPlayer(new SyncEnchantmentsData(), player);
-                NetworkManager.sendToPlayer(new SyncMatData(), player);
+                NetworkManager.sendToPlayer(new SyncEnchantabilityData(), player);
             }
         });
     }

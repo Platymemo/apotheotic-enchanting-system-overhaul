@@ -7,12 +7,10 @@ import aiefu.eso.data.client.ColorDataHolder;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.locale.Language;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
@@ -24,20 +22,20 @@ import org.lwjgl.glfw.GLFW;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ESOClient {
-    public static ColorDataHolder colorData;
     private static final ConcurrentHashMap<Enchantment, MutableComponent> descriptions = new ConcurrentHashMap<>();
+    public static ColorDataHolder colorData;
     public static KeyMapping recipeKey = new KeyMapping("eso.recipekeybind",
             InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_U, "eso.modname");
 
     public static void onInitializeClient(FMLClientSetupEvent event) {
-        MenuScreens.register(ESOCommon.enchantment_menu_ovr.get(), EnchantingTableScreen::new);
+        MenuScreens.register(ESOCommon.ENCHANTMENT_MENU.get(), EnchantingTableScreen::new);
     }
 
-    public static void registerToModBusEvent(IEventBus bus){
+    public static void registerToModBusEvent(IEventBus bus) {
         bus.register(new ClientEvents());
     }
 
-    public static MutableComponent getEnchantmentDescription(Enchantment e){
+    public static MutableComponent getEnchantmentDescription(Enchantment e) {
         return descriptions.computeIfAbsent(e, (enchantment) -> {
             String desc = enchantment.getDescriptionId();
             String ed = desc + ".desc";
@@ -46,26 +44,18 @@ public class ESOClient {
 
                 ed = desc + ".description";
             }
-           return Component.translatable(ed).withStyle(ChatFormatting.DARK_GRAY);
+            return Component.translatable(ed).withStyle(ChatFormatting.DARK_GRAY);
         });
     }
 
-    public static Player getClientPlayer(){
-        return Minecraft.getInstance().player;
-    }
-
-    public static void copyToClipboard(String s){
-        Minecraft.getInstance().keyboardHandler.setClipboard(s);
-    }
-
-    public static class ClientEvents{
+    public static class ClientEvents {
         @SubscribeEvent
-        public void registerClientReloadListener(RegisterClientReloadListenersEvent e){
+        public void registerClientReloadListener(RegisterClientReloadListenersEvent e) {
             e.registerReloadListener(ColorsDataLoader::reload);
         }
 
         @SubscribeEvent
-        public void registerKeyBinds(RegisterKeyMappingsEvent e){
+        public void registerKeyBinds(RegisterKeyMappingsEvent e) {
             e.register(ESOClient.recipeKey);
         }
     }

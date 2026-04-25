@@ -1,0 +1,94 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "enchantment": "minecraft:depth_strider",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:nautilus_shell"
+          },
+          "amount": 3
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:kelp"
+          },
+          "amount": 12
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 2,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:nautilus_shell"
+          },
+          "amount": 3
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:kelp"
+          },
+          "amount": 24
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 3,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 48
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:nautilus_shell"
+          },
+          "amount": 6
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:kelp"
+          },
+          "amount": 24
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+

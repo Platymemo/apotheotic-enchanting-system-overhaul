@@ -1,0 +1,94 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "enchantment": "minecraft:thorns",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:pufferfish"
+          },
+          "amount": 3
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:quartz"
+          },
+          "amount": 12
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 2,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 16
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:pufferfish"
+          },
+          "amount": 4
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:quartz"
+          },
+          "amount": 24
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 3,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:pufferfish"
+          },
+          "amount": 7
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:quartz"
+          },
+          "amount": 24
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+

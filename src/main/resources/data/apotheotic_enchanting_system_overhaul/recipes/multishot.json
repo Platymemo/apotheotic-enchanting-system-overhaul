@@ -1,0 +1,36 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "enchantment": "minecraft:multishot",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:ender_pearl"
+          },
+          "amount": 6
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:arrow"
+          },
+          "amount": 3
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+

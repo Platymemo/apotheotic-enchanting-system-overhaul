@@ -1,0 +1,152 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "enchantment": "minecraft:bane_of_arthropods",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 3
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:glistering_melon_slice"
+          },
+          "amount": 3
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:spingredienter_eye"
+          },
+          "amount": 3
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 2,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 6
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:glistering_melon_slice"
+          },
+          "amount": 4
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:spingredienter_eye"
+          },
+          "amount": 6
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 3,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 9
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:glistering_melon_slice"
+          },
+          "amount": 4
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:spingredienter_eye"
+          },
+          "amount": 4
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 4,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:glistering_melon_slice"
+          },
+          "amount": 4
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:spingredienter_eye"
+          },
+          "amount": 12
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 5,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:glistering_melon_slice"
+          },
+          "amount": 4
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:spingredienter_eye"
+          },
+          "amount": 16
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+

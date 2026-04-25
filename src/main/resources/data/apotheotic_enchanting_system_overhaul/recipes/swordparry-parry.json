@@ -1,0 +1,83 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "frycparry"
+    }
+  ],
+  "enchantment": "frycparry:parry_enchantment",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 16
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:piston"
+          },
+          "amount": 4
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:fermented_spider_eye"
+          },
+          "amount": 3
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:slime_ball"
+          },
+          "amount": 2
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 2,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:piston"
+          },
+          "amount": 8
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:fermented_spider_eye"
+          },
+          "amount": 7
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:slime_ball"
+          },
+          "amount": 4
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+

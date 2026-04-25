@@ -1,0 +1,65 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "enchantment": "minecraft:punch",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:firework_rocket"
+          },
+          "amount": 3
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:piston"
+          },
+          "amount": 4
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 2,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 32
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:firework_rocket"
+          },
+          "amount": 8
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:piston"
+          },
+          "amount": 6
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+

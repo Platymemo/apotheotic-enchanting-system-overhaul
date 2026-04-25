@@ -1,0 +1,126 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "enchantment": "minecraft:riptide",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:water_bucket"
+          },
+          "amount": 1
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:magma_block"
+          },
+          "amount": 2
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 12
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 2,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:water_bucket"
+          },
+          "amount": 1
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:magma_block"
+          },
+          "amount": 8
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:redstone"
+          },
+          "amount": 16
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 3,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:water_bucket"
+          },
+          "amount": 1
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:magma_block"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": [
+            {
+              "type": "forge:nbt",
+              "item": "minecraft:potion",
+              "nbt": "{Potion: \"minecraft:swiftness\"}"
+            },
+            {
+              "type": "forge:nbt",
+              "item": "minecraft:potion",
+              "nbt": "{Potion: \"minecraft:long_swiftness\"}"
+            },
+            {
+              "type": "forge:nbt",
+              "item": "minecraft:potion",
+              "nbt": "{Potion: \"minecraft:strong_swiftness\"}"
+            }
+          ],
+          "amount": 1
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+

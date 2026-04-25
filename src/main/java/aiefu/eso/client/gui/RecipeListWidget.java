@@ -1,11 +1,7 @@
 package aiefu.eso.client.gui;
 
-import aiefu.eso.data.RecipeHolder;
-import aiefu.eso.data.itemdata.ItemDataPrepared;
 import aiefu.eso.data.itemdata.RecipeViewerData;
-import aiefu.eso.data.itemdata.RecipeViewerItemData;
-import it.unimi.dsi.fastutil.ints.Int2IntMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import aiefu.eso.recipe.EnchantmentRecipe;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -25,9 +21,9 @@ import java.util.List;
 import java.util.Objects;
 
 public class RecipeListWidget extends AbstractScrollWidget {
-    protected RecipeHolder recipe;
+    protected EnchantmentRecipe recipe;
 
-    protected List<RecipeViewerData> data;
+    protected List<RecipeViewerData> recipeViewerDataList;
     protected int innerHeight = 0;
 
     protected EnchantingTableScreen screen;
@@ -41,7 +37,7 @@ public class RecipeListWidget extends AbstractScrollWidget {
 
     @Override
     protected int getInnerHeight() {
-        return innerHeight;
+        return this.innerHeight;
     }
 
     @Override
@@ -57,19 +53,20 @@ public class RecipeListWidget extends AbstractScrollWidget {
     @Override
     protected void renderContents(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         int yOffset = this.getY() + 12;
-        List<RecipeViewerData> list = this.data;
-        for (RecipeViewerData d : list){
-            ItemDataPrepared[] itd = d.getItemData();
-            if(itd.length < 1 && d.getXp() < 1){
+        List<RecipeViewerData> list = this.recipeViewerDataList;
+        for (RecipeViewerData d : list) {
+            EnchantmentRecipe.LevelData levelData = d.getLevelData();
+
+            if (levelData.itemCosts().isEmpty() && d.getXp() < 1) {
                 continue;
             }
+
             int wOffset = this.getX() + 2;
-            Font font = screen.getFont();
-            guiGraphics.drawString(font, d.getDesc(), wOffset + 2, yOffset - 9,4210752, false);
-            if(itd.length > 0){
-                for (RecipeViewerItemData i : d.getCachedStacks()){
-                    ItemStack stack = i.isAnimated() ? i.getNextStack() : i.getStack();
-                    if(withinContentAreaPoint(mouseX, mouseY) && currentItemIsHovered(yOffset, wOffset, mouseX, mouseY)){
+            Font font = this.screen.getFont();
+            guiGraphics.drawString(font, d.getDesc(), wOffset + 2, yOffset - 9, 4210752, false);
+            if (!levelData.itemCosts().isEmpty()) {
+                for (var stack : d.getStacks()) {
+                    if (withinContentAreaPoint(mouseX, mouseY) && currentItemIsHovered(yOffset, wOffset, mouseX, mouseY)) {
                         this.setTooltipForNextPass(stack, font);
                     }
                     guiGraphics.renderFakeItem(stack, wOffset, yOffset);
@@ -77,9 +74,9 @@ public class RecipeListWidget extends AbstractScrollWidget {
                     wOffset += 20;
                 }
                 guiGraphics.blit(EnchantingTableScreen.ENCHANTING_BACKGROUND_TEXTURE, wOffset, yOffset + 2, 210, 197, 16, 14);
-                wOffset +=20;
-                ItemStack resultStack = d.getResultStack();
-                if(withinContentAreaPoint(mouseX, mouseY) && currentItemIsHovered(yOffset, wOffset, mouseX, mouseY)){
+                wOffset += 20;
+                ItemStack resultStack = d.getResult();
+                if (withinContentAreaPoint(mouseX, mouseY) && currentItemIsHovered(yOffset, wOffset, mouseX, mouseY)) {
                     this.setTooltipForNextPass(resultStack, font);
                 }
                 guiGraphics.renderFakeItem(resultStack, wOffset, yOffset);
@@ -90,9 +87,9 @@ public class RecipeListWidget extends AbstractScrollWidget {
         }
     }
 
-    public void setTooltipForNextPass(ItemStack stack, Font font){
+    public void setTooltipForNextPass(ItemStack stack, Font font) {
         List<FormattedCharSequence> fcsl = new ArrayList<>();
-        for (Component c : Screen.getTooltipFromItem(Minecraft.getInstance(), stack)){
+        for (Component c : Screen.getTooltipFromItem(Minecraft.getInstance(), stack)) {
             fcsl.addAll(font.split(c, 200));
         }
         this.screen.setTooltipForNextRenderPass(fcsl);
@@ -110,70 +107,61 @@ public class RecipeListWidget extends AbstractScrollWidget {
         }
 
     }
+
     protected void renderScrollBar(GuiGraphics guiGraphics) {
         int i = this.getScrollBarHeight();
         int minX = this.getX() + this.width;
         int maxX = this.getX() + this.width + 8;
-        int minY = Math.max(this.getY(), (int)this.scrollAmount() * (this.height - i) / this.getMaxScrollAmount() + this.getY());
+        int minY = Math.max(this.getY(), (int) this.scrollAmount() * (this.height - i) / this.getMaxScrollAmount() + this.getY());
         int maxY = minY + i;
         guiGraphics.fill(minX, minY, maxX, maxY, -345617);
-        guiGraphics.fill(minX + 1, minY + 1, maxX - 1, maxY -1, -4814674); //-8241880 . -11789813 //og -8355712 . -4144960 //purple -4814674 . -345617
+        guiGraphics.fill(minX + 1, minY + 1, maxX - 1, maxY - 1, -4814674); //-8241880 . -11789813 //og -8355712 . -4144960 //purple -4814674 . -345617
     }
 
     private int getScrollBarHeight() {
-        return Mth.clamp((int)((float)(this.height * this.height) / (float)this.getContentHeight()), 32, this.height);
+        return Mth.clamp((int) ((float) (this.height * this.height) / (float) this.getContentHeight()), 32, this.height);
     }
 
     private int getContentHeight() {
         return this.getInnerHeight() + 4;
     }
 
-    public void tick(){
-        if(this.tickCount % 60 == 0){
-            for (RecipeViewerData recipeViewerData : this.data){
-                for (RecipeViewerItemData d : recipeViewerData.getCachedStacks()){
-                    d.next();
-                }
+    public void tick() {
+        if (this.tickCount % 60 == 0) {
+            for (RecipeViewerData recipeViewerData : this.recipeViewerDataList) {
+                recipeViewerData.next();
             }
         }
+
         this.tickCount++;
     }
 
-    protected boolean currentItemIsHovered(int yOffset, int wOffset, int mouseX, int mouseY){
+    protected boolean currentItemIsHovered(int yOffset, int wOffset, int mouseX, int mouseY) {
         int k = (int) (mouseY + scrollAmount());
         return mouseX > wOffset && mouseX < wOffset + 17 && k > yOffset && k < yOffset + 17;
     }
 
-    public void updateRecipes(RecipeHolder holder, Enchantment enchantment){
-        Objects.requireNonNull(holder);
-        this.recipe = holder;
+    public void updateRecipes(EnchantmentRecipe recipe, Enchantment enchantment) {
+        Objects.requireNonNull(recipe);
+        this.recipe = recipe;
         this.prepareData(enchantment);
-        this.innerHeight = this.data.size() * 32;
+        this.innerHeight = this.recipeViewerDataList.size() * 32;
         this.setScrollAmount(0.0D);
     }
 
-    protected void prepareData(Enchantment enchantment){
+    protected void prepareData(Enchantment enchantment) {
         Int2ObjectOpenHashMap<RecipeViewerData> map = new Int2ObjectOpenHashMap<>();
-        for (Int2ObjectMap.Entry<ItemDataPrepared[]> set : this.recipe.levels.int2ObjectEntrySet()){
-            int lvl = set.getIntKey();
-            if(set.getValue() != null){
-                map.put(lvl, new RecipeViewerData(set.getValue(), lvl, enchantment, this.recipe.mode));
-            }
-        }
-        for (Int2IntMap.Entry set : this.recipe.xpMap.int2IntEntrySet()){
-            int lvl = set.getIntKey();
-            RecipeViewerData data = map.get(lvl);
-            if(data != null){
-                data.setXp(set.getIntValue());
-            } else map.put(lvl, new RecipeViewerData(set.getIntValue(), lvl, enchantment, this.recipe.mode));
+        for (EnchantmentRecipe.LevelData levelData : this.recipe.levels) {
+            int lvl = levelData.level();
+            map.put(lvl, new RecipeViewerData(levelData, enchantment, this.recipe.useExpPoints));
         }
         List<Integer> keyset = new ArrayList<>(map.keySet());
         List<RecipeViewerData> sortedData = new ArrayList<>();
         Collections.sort(keyset);
-        for (int k : keyset){
+        for (int k : keyset) {
             sortedData.add(map.get(k));
         }
-        this.data = sortedData;
+        this.recipeViewerDataList = sortedData;
     }
 
     @Override

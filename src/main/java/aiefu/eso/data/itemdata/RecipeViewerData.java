@@ -1,7 +1,8 @@
 package aiefu.eso.data.itemdata;
 
-import aiefu.eso.Utils;
 import aiefu.eso.client.gui.EnchantingTableScreen;
+import aiefu.eso.recipe.EnchantmentRecipe;
+import dev.shadowsoffire.placebo.util.EnchantmentUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.CommonComponents;
@@ -13,105 +14,73 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RecipeViewerData {
-    protected ItemDataPrepared[] itemData = new ItemDataPrepared[]{};
-    protected RecipeViewerItemData[] cachedStacks;
-    protected final Enchantment enchantment;
-    protected ItemStack resultStack;
-    protected int xp = 0;
-    protected int lvl;
-    protected boolean mode;
+    protected EnchantmentRecipe.LevelData levelData;
+    protected Enchantment enchantment;
+    protected boolean useExp;
     protected Component desc;
+    protected final ItemStack result;
+    protected int maxCycle;
+    protected int cycle = 0;
 
-    public RecipeViewerData(ItemDataPrepared[] itemData, int lvl, Enchantment enchantment, boolean mode) {
-        this.itemData = itemData;
-        this.lvl = lvl;
+    public RecipeViewerData(EnchantmentRecipe.LevelData levelData, Enchantment enchantment, boolean useExp) {
+        this.levelData = levelData;
         this.enchantment = enchantment;
-        this.mode = mode;
-        this.cacheItemStacks(itemData);
+        this.useExp = useExp;
+        this.result = Items.ENCHANTED_BOOK.getDefaultInstance();
+        EnchantedBookItem.addEnchantment(this.result, new EnchantmentInstance(enchantment, levelData.level()));
         this.composeDescription();
+        this.updateMaxCycle();
     }
 
-    public RecipeViewerData(int xp, int lvl, Enchantment enchantment, boolean mode) {
-        this.xp = xp;
-        this.lvl = lvl;
-        this.enchantment = enchantment;
-        this.mode = mode;
-        this.cacheItemStacks(null);
-        this.composeDescription();
+    private void updateMaxCycle() {
+        this.maxCycle = this.levelData.itemCosts().stream().mapToInt(pair -> pair.ingredient().getItems().length).max().orElse(1);
     }
 
-    public RecipeViewerData(ItemDataPrepared[] itemData, int xp, int lvl, Enchantment enchantment, boolean mode) {
-        this.itemData = itemData;
-        this.xp = xp;
-        this.lvl = lvl;
-        this.enchantment = enchantment;
-        this.mode = mode;
-        this.cacheItemStacks(itemData);
-        this.composeDescription();
-    }
-
-    public ItemDataPrepared[] getItemData() {
-        return itemData;
-    }
-
-    public int getXp() {
-        return xp;
-    }
-
-    public void setItemData(ItemDataPrepared[] itemData) {
-        this.itemData = itemData;
-        this.cacheItemStacks(itemData);
-    }
-
-    public void setXp(int xp) {
-        this.xp = xp;
-        this.composeDescription();
-    }
-
-    public void cacheItemStacks(ItemDataPrepared[] prepared){
-        RecipeViewerItemData[] data;
-        if(prepared != null){
-            data = new RecipeViewerItemData[prepared.length];
-            for (int i = 0; i < prepared.length; i++) {
-                data[i] = new RecipeViewerItemData(prepared[i]);
-            }
-        } else data = new RecipeViewerItemData[0];
-        this.cachedStacks = data;
-        this.resultStack = new ItemStack(Items.ENCHANTED_BOOK, 1);
-        EnchantedBookItem.addEnchantment(resultStack, new EnchantmentInstance(enchantment, lvl));
-    }
-
-    public void composeDescription(){
-        LocalPlayer player = Minecraft.getInstance().player;
-        MutableComponent c = Component.translatable("eso.rv.level", this.lvl);
-        if(xp > 0){
-            if(mode){
-                int totalXP = Utils.getTotalAvailableXPPoints(player);
+    private void composeDescription() {
+        MutableComponent c = Component.translatable("eso.rv.level", this.levelData.level());
+        int xpCost = this.levelData.xpCost();
+        if (xpCost > 0) {
+            if (this.useExp) {
                 c.append(CommonComponents.SPACE);
-                c.append(Component.translatable("eso.rv.xpreql", xp, EnchantingTableScreen.getFormatter().format(Utils.getXPCostInLevels(player, xp, totalXP))));
+                c.append(Component.translatable("eso.rv.xpreql", xpCost, EnchantingTableScreen.getFormatter().format(EnchantmentUtils.getLevelForExperience(xpCost))));
             } else {
                 c.append(CommonComponents.SPACE);
-                c.append(Component.translatable("eso.rv.xpreqp", xp));
+                c.append(Component.translatable("eso.rv.xpreqp", xpCost));
             }
         }
         this.desc = c;
     }
 
-    public ItemStack getResultStack() {
-        return resultStack;
+    public void next() {
+        this.cycle++;
     }
 
-    public RecipeViewerItemData[] getCachedStacks() {
-        return cachedStacks;
+    public EnchantmentRecipe.LevelData getLevelData() {
+        return levelData;
     }
 
-    public int getLvl() {
-        return lvl;
+    public int getXp() {
+        return this.levelData.xpCost();
     }
 
-    public boolean isMode() {
-        return mode;
+    public ItemStack getResult() {
+        return this.result;
+    }
+
+    public List<ItemStack> getStacks() {
+        List<ItemStack> stacks = new ArrayList<>(this.levelData.itemCosts().size());
+        for (EnchantmentRecipe.ItemCost itemCost : this.levelData.itemCosts()) {
+            ItemStack stack = itemCost.getStack(this.cycle);
+            stack.setCount(itemCost.count());
+
+            stacks.add(stack);
+        }
+
+        return stacks;
     }
 
     public Component getDesc() {

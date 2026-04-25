@@ -1,0 +1,51 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "enchantment": "minecraft:aqua_affinity",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:lapis_lazuli"
+          },
+          "amount": 16
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:glow_ink_sac"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:nautilus_shell"
+          },
+          "amount": 6
+        },
+        {
+          "ingredient": [
+            {
+              "type": "forge:nbt",
+              "item": "minecraft:potion",
+              "nbt": "{Potion: \"minecraft:water_breathing\"}"
+            },
+            {
+              "type": "forge:nbt",
+              "item": "minecraft:potion",
+              "nbt": "{Potion: \"minecraft:long_water_breathing\"}"
+            }
+          ],
+          "amount": 1
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+

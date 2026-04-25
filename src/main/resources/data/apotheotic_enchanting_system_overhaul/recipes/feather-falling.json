@@ -1,0 +1,123 @@
+{
+  "type": "apotheotic_enchanting_system_overhaul:enchantment",
+  "enchantment": "minecraft:feather_falling",
+  "levels": [
+    {
+      "level": 1,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:feather"
+          },
+          "amount": 3
+        },
+        {
+          "ingredient": {
+            "tag": "minecraft:wool"
+          },
+          "amount": 6
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:hay_block"
+          },
+          "amount": 2
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 2,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:feather"
+          },
+          "amount": 9
+        },
+        {
+          "ingredient": {
+            "tag": "minecraft:wool"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:hay_block"
+          },
+          "amount": 4
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 3,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:feather"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "tag": "minecraft:wool"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:hay_block"
+          },
+          "amount": 6
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    },
+    {
+      "level": 4,
+      "xpCost": 0,
+      "ingredients": [
+        {
+          "ingredient": {
+            "item": "minecraft:feather"
+          },
+          "amount": 12
+        },
+        {
+          "ingredient": {
+            "tag": "minecraft:wool"
+          },
+          "amount": 24
+        },
+        {
+          "ingredient": {
+            "item": "minecraft:hay_block"
+          },
+          "amount": 9
+        }
+      ],
+      "requirements": {
+        "eterna": 0,
+        "quanta": 0,
+        "arcana": 0
+      }
+    }
+  ]
+}
+
